@@ -14,6 +14,8 @@ session = HTMLSession()
 def get_courses(link):
 
     """
+        input: url to CSUF Computer Science 24-25 catalog from California State University, Fullerton
+        output: .json file with course catalog
     """
 
     r = session.get(link)
@@ -50,8 +52,6 @@ def get_courses(link):
         course_type_idx = 0
 
         for idx, section in enumerate(sections, start=0):
-            print(f"\nSection {idx}:")
-
             # extract all course items within the section
             course_items = section.find('li.acalog-course')
             courses = [course.find('a', first=True).text for course in course_items if course.find('a', first=True)]
@@ -66,6 +66,8 @@ def get_courses(link):
 
 def main():
     cs_courses = get_courses(cs_catalog_2024)
-    print(json.dumps(cs_courses, indent=4))
+    with open("cs_courses.json", "w") as f:
+        json.dump(cs_courses, f, indent=4) 
+    print("Saved output to cs_courses.json")
 
 main()
